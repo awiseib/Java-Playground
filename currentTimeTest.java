@@ -30,9 +30,13 @@ public class currentTimeTest extends DefaultEWrapper {
 		final EClientSocket m_client = wrapper.getClient();
 		final EReaderSignal m_signal = wrapper.getSignal();
 		
+		// Connection Parameters
+		String hostIP = "127.0.0.1";
 		int port = 7496;
+		int clientId = 1001;
+		
 		//! [connect]
-		m_client.eConnect("127.0.0.1", port, 2);
+		m_client.eConnect(hostIP, port, clientId);
 		//! [connect]
 		//! [ereader]
 		final EReader reader = new EReader(m_client, m_signal);   
