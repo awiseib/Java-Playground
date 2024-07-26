@@ -21,7 +21,7 @@ public class placeOrderTest extends DefaultEWrapper {
 	}
 	
 	public int getCurrentOrderId() {
-		return currentOrderId;
+		return currentOrderId+=1;
 	}	
 
 	public static void main(String[] args) throws InterruptedException {
@@ -48,35 +48,38 @@ public class placeOrderTest extends DefaultEWrapper {
 		            System.out.println("Exception: "+e.getMessage());
 		        }
 		    }
-		}).start();Thread.sleep(1000);
+		}).start();
+		
+		Thread.sleep(1000);
+		m_client.reqIds(-1);
 
-        int orderId = wrapper.getCurrentOrderId()+1;
+		Thread.sleep(1000);
 
 		Contract contract = new Contract();
-		contract.symbol("AAPL");
+		contract.symbol("TECS");
 		contract.secType("STK");
-		contract.exchange("SMART");
+		contract.exchange("OVERNIGHT");
 		contract.currency("USD");
 
-        Order order = new Order();
-        order.action("BUY");
-        order.orderType("LMT");
-		order.lmtPrice(147);
-        order.totalQuantity(Decimal.get(10));
+		Order order = new Order();
+		order.orderId();
+		order.action("BUY");
+		order.orderType("LMT");
+		order.lmtPrice(9.5);
+		order.totalQuantity(Decimal.get(10));
 
-		m_client.placeOrder(orderId , contract, order);
+		m_client.placeOrder(7000, contract, order);
+		// m_client.cancelOrder(1002, "20230905 14:00:00 America/Chicago");
 
 
 		Thread.sleep(100000);
 		m_client.eDisconnect();
 	}
 
-	// @Override
-	// public void nextValidId(int orderId){
-	// 	System.out.println(orderId);
-	// 	int m_client.orderId = orderId;
-
-	// }
+	@Override
+	public void nextValidId(int orderId){
+		currentOrderId = orderId;
+	}
 	
 	@Override
 	public void openOrder(int orderId, Contract contract, Order order, OrderState orderState) {

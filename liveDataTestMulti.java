@@ -4,13 +4,13 @@ import java.io.FileWriter;   // Import the FileWriter class
 
 import com.ib.client.*;
 
-public class liveDataTest extends DefaultEWrapper {
+public class liveDataTestMulti extends DefaultEWrapper {
 
 	private EReaderSignal readerSignal;
 	private EClientSocket clientSocket;
 	protected int currentOrderId = -1;
 	
-	public liveDataTest() {
+	public liveDataTestMulti() {
 		readerSignal = new EJavaSignal();
 		clientSocket = new EClientSocket(this, readerSignal);
 	}
@@ -52,13 +52,23 @@ public class liveDataTest extends DefaultEWrapper {
 		}).start();Thread.sleep(1000);
 
 		Contract contract = new Contract();
-		contract.symbol("AAPL");
 		contract.secType("STK");
 		contract.exchange("SMART");
 		contract.currency("USD");
 		
-		m_client.reqMarketDataType(4);
-		m_client.reqMktData(1234, contract, "", false, false, null);
+		// m_client.reqMarketDataType(4);
+		
+		// Request 1
+		contract.symbol("AAPL");
+		m_client.reqMktData(wrapper.getCurrentOrderId(), contract, "", false, false, null);
+		
+		// Request 2
+		contract.symbol("TSLA");
+		m_client.reqMktData(wrapper.getCurrentOrderId(), contract, "", false, false, null);
+		
+		// Request 3
+		contract.symbol("F");
+		m_client.reqMktData(wrapper.getCurrentOrderId(), contract, "", false, false, null);
 
 		Thread.sleep(1000);
 		m_client.eDisconnect();

@@ -5,7 +5,7 @@ public class bracketOrderTest extends DefaultEWrapper {
 
 	private EReaderSignal readerSignal;
 	private EClientSocket clientSocket;
-	protected int currentOrderId = -1;
+	public int currentOrderId = -1;
 	
 	public bracketOrderTest() {
 		readerSignal = new EJavaSignal();
@@ -21,8 +21,9 @@ public class bracketOrderTest extends DefaultEWrapper {
 	}
 	
 	public int getCurrentOrderId() {
-		return currentOrderId;
+		return currentOrderId+=1;
 	}	
+
 
 	public static void main(String[] args) throws InterruptedException {
 		bracketOrderTest wrapper = new bracketOrderTest();
@@ -50,7 +51,7 @@ public class bracketOrderTest extends DefaultEWrapper {
 		    }
 		}).start();Thread.sleep(1000);
 
-        int orderId = wrapper.getCurrentOrderId();
+			int orderId = wrapper.getCurrentOrderId();
 
 		Contract contract = new Contract();
 		contract.symbol("AAPL");
@@ -59,7 +60,7 @@ public class bracketOrderTest extends DefaultEWrapper {
 		contract.currency("USD");
 
         Order parent = new Order();
-		parent.orderId(orderId);
+		parent.orderId(wrapper.getCurrentOrderId());
         parent.action("BUY");
         parent.orderType("LMT");
 		parent.lmtPrice(147);
@@ -67,8 +68,8 @@ public class bracketOrderTest extends DefaultEWrapper {
 		parent.transmit(false);
 
         Order profitTaker = new Order();
-		profitTaker.parentId(orderId);
-		profitTaker.orderId(orderId+1);
+		profitTaker.parentId(parent.orderId());
+		profitTaker.orderId(parent.orderId());
         profitTaker.action("SELL");
         profitTaker.orderType("LMT");
 		profitTaker.lmtPrice(137);
@@ -77,7 +78,7 @@ public class bracketOrderTest extends DefaultEWrapper {
 
         Order stopLoss = new Order();
 		stopLoss.parentId(orderId);
-		stopLoss.orderId(orderId+2);
+		stopLoss.orderId(parent.orderId());
         stopLoss.action("SELL");
         stopLoss.orderType("STP");
 		stopLoss.auxPrice(155);
@@ -90,6 +91,11 @@ public class bracketOrderTest extends DefaultEWrapper {
 
 		Thread.sleep(100000);
 		m_client.eDisconnect();
+	}
+
+	@Override
+	public void nextValidId(int orderId){
+		currentOrderId = orderId;
 	}
 	
 	@Override

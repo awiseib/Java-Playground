@@ -1,12 +1,19 @@
+
+import java.io.IOException;
+// import java.nio.file.Files;
+// import java.nio.file.Path;
+import java.io.File;
+import java.util.Scanner;
+
 import com.ib.client.*;
 
-public class historicDataTest extends DefaultEWrapper {
+public class replaceFaTest extends DefaultEWrapper {
 
 	private EReaderSignal readerSignal;
 	private EClientSocket clientSocket;
 	protected int currentOrderId = -1;
 	
-	public historicDataTest() {
+	public replaceFaTest() {
 		readerSignal = new EJavaSignal();
 		clientSocket = new EClientSocket(this, readerSignal);
 	}
@@ -24,7 +31,7 @@ public class historicDataTest extends DefaultEWrapper {
 	}	
 
 	public static void main(String[] args) throws InterruptedException {
-		historicDataTest wrapper = new historicDataTest();
+		replaceFaTest wrapper = new replaceFaTest();
 		final EClientSocket m_client = wrapper.getClient();
 		final EReaderSignal m_signal = wrapper.getSignal();
 		
@@ -47,17 +54,28 @@ public class historicDataTest extends DefaultEWrapper {
 		    }
 		}).start();Thread.sleep(1000);
 
-		Contract contract = new Contract();
-		contract.symbol("AAPL");
-		contract.secType("STK");
-		contract.exchange("SMART");
-		contract.currency("USD");
+		try {
+			// Path path = Path.of("D:\\Code\\Java Playground\\faData_Groups.xml");
+			// String groups_xml = Files.readString(path);
 
-		m_client.reqHistoricalData(1234, contract, "", "1 D", "1 hour", "Trades", 0, 1, false, null);
+			File fa_data_file = new File("D:\\Code\\Java Playground\\faData_Groups.xml");
+			Scanner fa_data_reader = new Scanner(fa_data_file);
+			String fa_data = fa_data_reader.nextLine();
+			fa_data_reader.close();
 
+			m_client.replaceFA(1234, 1, fa_data);
+		}
+		catch (IOException e) {
+			System.out.println("Exception");;
+		}
 
 		Thread.sleep(1000);
 		m_client.eDisconnect();
+	}
+
+	@Override
+	public void replaceFAEnd(int reqId, String text) {
+		System.out.println("ReplaceFa End: " + text + "\n");
 	}
 
 	@Override
@@ -65,14 +83,14 @@ public class historicDataTest extends DefaultEWrapper {
 		currentOrderId = orderId;
 	}
 	
-   @Override
-   public void historicalData(int reqId, Bar bar) {
-		System.out.println("HistoricalData:  " + EWrapperMsgGenerator.historicalData(reqId, bar.time(), bar.open(), bar.high(), bar.low(), bar.close(), bar.volume(), bar.count(), bar.wap()));
-    
-   }
-   
-   @Override
-   public void historicalDataEnd(int reqId, String startDateStr, String endDateStr) {
-       System.out.println("HistoricalDataEnd. " + EWrapperMsgGenerator.historicalDataEnd(reqId, startDateStr, endDateStr));
-   }
+	
+	@Override
+	public void error(int id, int errorCode, String errorMsg, String advancedOrderRejectJson) {
+		String str = "Error. Id: " + id + ", Code: " + errorCode + ", Msg: " + errorMsg;
+		if (advancedOrderRejectJson != null) {
+			str += (", AdvancedOrderRejectJson: " + advancedOrderRejectJson);
+		}
+		System.out.println(str + "\n");
+	}
+	
 }

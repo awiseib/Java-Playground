@@ -21,7 +21,7 @@ public class contractDetailsTest extends DefaultEWrapper {
 	}
 	
 	public int getCurrentOrderId() {
-		return currentOrderId;
+		return currentOrderId+=1;
 	}	
 
 	public static void main(String[] args) throws InterruptedException {
@@ -49,21 +49,27 @@ public class contractDetailsTest extends DefaultEWrapper {
 		    }
 		}).start();Thread.sleep(1000);
 
-		// Stock Contract
-		Contract contract = new Contract();
-		contract.symbol("AAPL");
-		contract.secType("STK");
-		contract.exchange("SMART");
-		contract.currency("USD");
-		contract.primaryExch("ISLAND");
+		// FIGI Contract
+		// Contract contract = new Contract();
+		// contract.secId("BBG000B9XRY4");
+		// contract.secType("FIGI");
+		// contract.exchange("SMART");
+
+		// // Stock Contract
+		// Contract contract = new Contract();
+		// contract.symbol("AAPL");
+		// contract.secType("STK");
+		// contract.exchange("SMART");
+		// contract.currency("USD");
+		// contract.primaryExch("ISLAND");
 
 		// Futures Contract
-		// Contract contract = new Contract();
-		// contract.symbol("ES");
-		// contract.secType("FUT");
-		// contract.exchange("CME");
-		// contract.currency("USD");
-		// contract.lastTradeDateOrContractMonth("202303");
+		Contract contract = new Contract();
+		contract.symbol("SGB");
+		contract.secType("FUT");
+		contract.exchange("SGX");
+		contract.currency("JPY");
+		contract.lastTradeDateOrContractMonth("202312");
 
 		// Options Contract
 		// Contract contract = new Contract();
@@ -81,6 +87,11 @@ public class contractDetailsTest extends DefaultEWrapper {
 
 		Thread.sleep(1000);
 		m_client.eDisconnect();
+	}
+
+	@Override
+	public void nextValidId(int orderId){
+		currentOrderId = orderId;
 	}
    
 	//! [contractdetails]

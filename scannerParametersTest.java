@@ -24,7 +24,7 @@ public class scannerParametersTest extends DefaultEWrapper {
 	}
 	
 	public int getCurrentOrderId() {
-		return currentOrderId;
+		return currentOrderId+=1;
 	}	
 
 	public static void main(String[] args) throws InterruptedException {
@@ -55,6 +55,11 @@ public class scannerParametersTest extends DefaultEWrapper {
 
 		Thread.sleep(100000);
 		m_client.eDisconnect();
+	}
+
+	@Override
+	public void nextValidId(int orderId){
+		currentOrderId = orderId;
 	}
 	
 	@Override

@@ -30,7 +30,7 @@ public class EWrapperImpl implements EWrapper {
 	}
 	
 	public int getCurrentOrderId() {
-		return currentOrderId;
+		return currentOrderId+=1;
 	}	
     
     //! [tickprice]

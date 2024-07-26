@@ -24,7 +24,7 @@ public class scannerTest extends DefaultEWrapper {
 	}
 	
 	public int getCurrentOrderId() {
-		return currentOrderId;
+		return currentOrderId+=1;
 	}	
 	public static void main(String[] args) throws InterruptedException {
 		scannerTest wrapper = new scannerTest();
@@ -32,7 +32,7 @@ public class scannerTest extends DefaultEWrapper {
 		final EClientSocket m_client = wrapper.getClient();
 		final EReaderSignal m_signal = wrapper.getSignal();
 		
-		int port = 7497;
+		int port = 7496;
 		m_client.eConnect("127.0.0.1", port, 1001);
 
 		final EReader reader = new EReader(m_client, m_signal);   
@@ -55,17 +55,25 @@ public class scannerTest extends DefaultEWrapper {
         sub.locationCode("STK.US.MAJOR");
         sub.scanCode("TOP_PERC_GAIN");
 		
-		TagValue t1 = new TagValue("volumeAbove", "10000");
-		TagValue t2 = new TagValue("marketCapBelow1e6", "1000");
-		TagValue t3 = new TagValue("priceAbove", "1");
+		TagValue t1 = new TagValue("avgVolumeAbove", "200000");
+		// TagValue t2 = new TagValue("marketCapBelow1e6", "1000");
+		// TagValue t3 = new TagValue("priceAbove", "1");
 
-		List<TagValue> TagValues = Arrays.asList(t1, t2, t3);
+		// List<TagValue> TagValues = Arrays.asList(t1, t2, t3);
+
+
+		List<TagValue> TagValues = Arrays.asList(t1);
 
 		m_client.reqScannerSubscription(1234, sub, null, TagValues);
 
 
 		Thread.sleep(1000);
 		m_client.eDisconnect();
+	}
+
+	@Override
+	public void nextValidId(int orderId){
+		currentOrderId = orderId;
 	}
     
    //! [scannerdata]

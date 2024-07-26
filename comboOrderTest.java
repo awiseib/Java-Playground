@@ -1,6 +1,5 @@
 
 import java.util.ArrayList;
-import java.util.List;
 import com.ib.client.*;
 
 public class comboOrderTest extends DefaultEWrapper {
@@ -23,7 +22,7 @@ public class comboOrderTest extends DefaultEWrapper {
 	}
 	
 	public int getCurrentOrderId() {
-		return currentOrderId;
+		return currentOrderId+=1;
 	}	
 
 	public static void main(String[] args) throws InterruptedException {
@@ -91,6 +90,11 @@ public class comboOrderTest extends DefaultEWrapper {
 
 		Thread.sleep(100000);
 		m_client.eDisconnect();
+	}
+
+	@Override
+	public void nextValidId(int orderId){
+		currentOrderId = orderId;
 	}
 	
 	@Override

@@ -21,7 +21,7 @@ public class executionsTest extends DefaultEWrapper {
 	}
 	
 	public int getCurrentOrderId() {
-		return currentOrderId;
+		return currentOrderId+=1;
 	}	
 
 	public static void main(String[] args) throws InterruptedException {
@@ -58,6 +58,10 @@ public class executionsTest extends DefaultEWrapper {
 		m_client.eDisconnect();
 	}
 
+	@Override
+	public void nextValidId(int orderId){
+		currentOrderId = orderId;
+	}
 	
 	@Override
 	public void execDetails(int reqId, Contract contract, Execution execution) {
