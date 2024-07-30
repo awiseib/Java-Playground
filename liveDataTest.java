@@ -1,7 +1,3 @@
-
-import java.io.IOException;  // Import the IOException class to handle errors
-import java.io.FileWriter;   // Import the FileWriter class
-
 import com.ib.client.*;
 
 public class liveDataTest extends DefaultEWrapper {

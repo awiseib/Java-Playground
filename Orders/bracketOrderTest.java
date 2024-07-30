@@ -1,13 +1,14 @@
+package Orders;
 
 import com.ib.client.*;
 
-public class placeOrderTest extends DefaultEWrapper {
+public class bracketOrderTest extends DefaultEWrapper {
 
 	private EReaderSignal readerSignal;
 	private EClientSocket clientSocket;
-	protected int currentOrderId = -1;
+	public int currentOrderId = -1;
 	
-	public placeOrderTest() {
+	public bracketOrderTest() {
 		readerSignal = new EJavaSignal();
 		clientSocket = new EClientSocket(this, readerSignal);
 	}
@@ -24,12 +25,13 @@ public class placeOrderTest extends DefaultEWrapper {
 		return currentOrderId+=1;
 	}	
 
+
 	public static void main(String[] args) throws InterruptedException {
-		placeOrderTest wrapper = new placeOrderTest();
+		bracketOrderTest wrapper = new bracketOrderTest();
 		
 		final EClientSocket m_client = wrapper.getClient();
 		final EReaderSignal m_signal = wrapper.getSignal();
-
+		
 		int port = 7496;
         
 		m_client.eConnect("127.0.0.1", port, 2);
@@ -48,29 +50,45 @@ public class placeOrderTest extends DefaultEWrapper {
 		            System.out.println("Exception: "+e.getMessage());
 		        }
 		    }
-		}).start();
-		
-		Thread.sleep(1000);
-		m_client.reqIds(-1);
+		}).start();Thread.sleep(1000);
 
-		Thread.sleep(1000);
+			int orderId = wrapper.getCurrentOrderId();
 
 		Contract contract = new Contract();
-		contract.symbol("TECS");
+		contract.symbol("AAPL");
 		contract.secType("STK");
-		contract.exchange("OVERNIGHT");
+		contract.exchange("SMART");
 		contract.currency("USD");
 
-		Order order = new Order();
-		order.orderId();
-		order.action("BUY");
-		order.orderType("LMT");
-		order.lmtPrice(9.5);
-		order.totalQuantity(Decimal.get(10));
+        Order parent = new Order();
+		parent.orderId(wrapper.getCurrentOrderId());
+        parent.action("BUY");
+        parent.orderType("LMT");
+		parent.lmtPrice(147);
+        parent.totalQuantity(Decimal.get(10));
+		parent.transmit(false);
 
-		m_client.placeOrder(7000, contract, order);
-		// m_client.cancelOrder(1002, "20230905 14:00:00 America/Chicago");
+        Order profitTaker = new Order();
+		profitTaker.parentId(parent.orderId());
+		profitTaker.orderId(parent.orderId());
+        profitTaker.action("SELL");
+        profitTaker.orderType("LMT");
+		profitTaker.lmtPrice(137);
+        profitTaker.totalQuantity(Decimal.get(10));
+		profitTaker.transmit(false);
 
+        Order stopLoss = new Order();
+		stopLoss.parentId(orderId);
+		stopLoss.orderId(parent.orderId());
+        stopLoss.action("SELL");
+        stopLoss.orderType("STP");
+		stopLoss.auxPrice(155);
+        stopLoss.totalQuantity(Decimal.get(10));
+		profitTaker.transmit(true);
+
+        m_client.placeOrder(parent.orderId() , contract, parent);
+        m_client.placeOrder(profitTaker.orderId(), contract, profitTaker);
+        m_client.placeOrder(stopLoss.orderId(), contract, stopLoss);
 
 		Thread.sleep(100000);
 		m_client.eDisconnect();
