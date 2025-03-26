@@ -48,12 +48,12 @@ public class historicDataTest extends DefaultEWrapper {
 		}).start();Thread.sleep(1000);
 
 		Contract contract = new Contract();
-		contract.symbol("AAPL");
-		contract.secType("STK");
-		contract.exchange("SMART");
+		contract.symbol("ES");
+		contract.secType("CONTFUT");
+		contract.exchange("CME");
 		contract.currency("USD");
 
-		m_client.reqHistoricalData(1234, contract, "", "1 D", "1 hour", "Trades", 0, 1, false, null);
+		m_client.reqHistoricalData(1234, contract, "", "1 Y", "15 mins", "Trades", 1, 1, false, null);
 
 
 		Thread.sleep(1000);

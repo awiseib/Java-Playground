@@ -57,7 +57,8 @@ public class liveDataTest extends DefaultEWrapper {
 		m_client.reqMktData(1234, contract, "", false, false, null);
 
 		Thread.sleep(1000);
-		m_client.eDisconnect();
+		// m_client.eDisconnect();
+		m_client.redirect("127.0.0.1");
 	}
 
 	@Override
@@ -103,7 +104,7 @@ public class liveDataTest extends DefaultEWrapper {
 	
 	
 	@Override
-	public void error(int id, int errorCode, String errorMsg, String advancedOrderRejectJson) {
+	public void error(int id, long errorTime, int errorCode, String errorMsg, String advancedOrderRejectJson) {
 		String str = "Error. Id: " + id + ", Code: " + errorCode + ", Msg: " + errorMsg;
 		if (advancedOrderRejectJson != null) {
 			str += (", AdvancedOrderRejectJson: " + advancedOrderRejectJson);

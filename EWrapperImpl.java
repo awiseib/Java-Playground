@@ -62,6 +62,9 @@ public class EWrapperImpl implements EWrapper {
    }
    //! [tickgeneric]
    
+   public void currentTimeInMillis(long timeInMillis) {
+    System.out.println("Current Time In Milliseconds: " + String.valueOf(timeInMillis));
+   }
    //! [tickstring]
    @Override
    public void tickString(int tickerId, int tickType, String value) {
@@ -76,8 +79,7 @@ public class EWrapperImpl implements EWrapper {
    }
    //! [orderstatus]
    @Override
-   public void orderStatus(int orderId, String status, Decimal filled, Decimal remaining, double avgFillPrice, int permId, int parentId,
-           double lastFillPrice, int clientId, String whyHeld, double mktCapPrice) {
+   public void orderStatus( int orderId, String status, Decimal filled, Decimal remaining, double avgFillPrice, long permId, int parentId, double lastFillPrice, int clientId, String whyHeld, double mktCapPrice) {
        System.out.println(EWrapperMsgGenerator.orderStatus( orderId, status, filled, remaining, avgFillPrice, permId, parentId, lastFillPrice, clientId, whyHeld, mktCapPrice));
    }
    //! [orderstatus]
@@ -273,8 +275,8 @@ public class EWrapperImpl implements EWrapper {
    
    //! [commissionreport]
    @Override
-   public void commissionReport(CommissionReport commissionReport) {
-       System.out.println(EWrapperMsgGenerator.commissionReport(commissionReport));
+   public void commissionAndFeesReport(CommissionAndFeesReport commissionReport) {
+       System.out.println(EWrapperMsgGenerator.commissionAndFeesReport(commissionReport));
    }
    //! [commissionreport]
    
@@ -348,7 +350,7 @@ public class EWrapperImpl implements EWrapper {
    }
    //! [error]
    @Override
-   public void error(int id, int errorCode, String errorMsg, String advancedOrderRejectJson) {
+   public void error(int id, long errorTime, int errorCode, String errorMsg, String advancedOrderRejectJson) {
        String str = "Error. Id: " + id + ", Code: " + errorCode + ", Msg: " + errorMsg;
        if (advancedOrderRejectJson != null) {
            str += (", AdvancedOrderRejectJson: " + advancedOrderRejectJson);

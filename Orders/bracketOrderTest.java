@@ -60,35 +60,35 @@ public class bracketOrderTest extends DefaultEWrapper {
 		contract.exchange("SMART");
 		contract.currency("USD");
 
-        Order parent = new Order();
+		Order parent = new Order();
 		parent.orderId(wrapper.getCurrentOrderId());
-        parent.action("BUY");
-        parent.orderType("LMT");
+		parent.action("BUY");
+		parent.orderType("LMT");
 		parent.lmtPrice(147);
-        parent.totalQuantity(Decimal.get(10));
+		parent.totalQuantity(Decimal.get(10));
 		parent.transmit(false);
 
-        Order profitTaker = new Order();
+		Order profitTaker = new Order();
 		profitTaker.parentId(parent.orderId());
 		profitTaker.orderId(parent.orderId());
-        profitTaker.action("SELL");
-        profitTaker.orderType("LMT");
+		profitTaker.action("SELL");
+		profitTaker.orderType("LMT");
 		profitTaker.lmtPrice(137);
-        profitTaker.totalQuantity(Decimal.get(10));
+		profitTaker.totalQuantity(Decimal.get(10));
 		profitTaker.transmit(false);
 
-        Order stopLoss = new Order();
+		Order stopLoss = new Order();
 		stopLoss.parentId(orderId);
 		stopLoss.orderId(parent.orderId());
-        stopLoss.action("SELL");
-        stopLoss.orderType("STP");
+		stopLoss.action("SELL");
+		stopLoss.orderType("STP");
 		stopLoss.auxPrice(155);
-        stopLoss.totalQuantity(Decimal.get(10));
+		stopLoss.totalQuantity(Decimal.get(10));
 		profitTaker.transmit(true);
 
-        m_client.placeOrder(parent.orderId() , contract, parent);
-        m_client.placeOrder(profitTaker.orderId(), contract, profitTaker);
-        m_client.placeOrder(stopLoss.orderId(), contract, stopLoss);
+		m_client.placeOrder(parent.orderId() , contract, parent);
+		m_client.placeOrder(profitTaker.orderId(), contract, profitTaker);
+		m_client.placeOrder(stopLoss.orderId(), contract, stopLoss);
 
 		Thread.sleep(100000);
 		m_client.eDisconnect();
@@ -110,8 +110,7 @@ public class bracketOrderTest extends DefaultEWrapper {
 	}
 	
 	@Override
-	public void orderStatus(int orderId, String status, Decimal filled, Decimal remaining, double avgFillPrice, int permId, int parentId,
-			double lastFillPrice, int clientId, String whyHeld, double mktCapPrice) {
+	public void orderStatus( int orderId, String status, Decimal filled, Decimal remaining, double avgFillPrice, long permId, int parentId, double lastFillPrice, int clientId, String whyHeld, double mktCapPrice) {
 		System.out.println(EWrapperMsgGenerator.orderStatus( orderId, status, filled, remaining, avgFillPrice, permId, parentId, lastFillPrice, clientId, whyHeld, mktCapPrice));
 	}
 	
@@ -126,7 +125,7 @@ public class bracketOrderTest extends DefaultEWrapper {
 	}
 
 	@Override
-	public void error(int id, int errorCode, String errorMsg, String advancedOrderRejectJson) {
+	public void error(int id, long errorTime, int errorCode, String errorMsg, String advancedOrderRejectJson) {
 		String str = "Error. Id: " + id + ", Code: " + errorCode + ", Msg: " + errorMsg;
 		if (advancedOrderRejectJson != null) {
 			str += (", AdvancedOrderRejectJson: " + advancedOrderRejectJson);

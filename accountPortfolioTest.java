@@ -88,7 +88,7 @@ public class accountPortfolioTest extends DefaultEWrapper {
 	//! [accountdownloadend]
 	
 	@Override
-	public void error(int id, int errorCode, String errorMsg, String advancedOrderRejectJson) {
+	public void error(int id, long errorTime, int errorCode, String errorMsg, String advancedOrderRejectJson) {
 		String str = "Error. Id: " + id + ", Code: " + errorCode + ", Msg: " + errorMsg;
 		if (advancedOrderRejectJson != null) {
 			str += (", AdvancedOrderRejectJson: " + advancedOrderRejectJson);

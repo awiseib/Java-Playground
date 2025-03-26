@@ -109,8 +109,7 @@ public class comboOrderTest extends DefaultEWrapper {
 	}
 	
 	@Override
-	public void orderStatus(int orderId, String status, Decimal filled, Decimal remaining, double avgFillPrice, int permId, int parentId,
-			double lastFillPrice, int clientId, String whyHeld, double mktCapPrice) {
+	public void orderStatus( int orderId, String status, Decimal filled, Decimal remaining, double avgFillPrice, long permId, int parentId, double lastFillPrice, int clientId, String whyHeld, double mktCapPrice) {
 		System.out.println(EWrapperMsgGenerator.orderStatus( orderId, status, filled, remaining, avgFillPrice, permId, parentId, lastFillPrice, clientId, whyHeld, mktCapPrice));
 	}
 	
@@ -125,7 +124,7 @@ public class comboOrderTest extends DefaultEWrapper {
 	}
 
 	@Override
-	public void error(int id, int errorCode, String errorMsg, String advancedOrderRejectJson) {
+	public void error(int id, long errorTime, int errorCode, String errorMsg, String advancedOrderRejectJson) {
 		String str = "Error. Id: " + id + ", Code: " + errorCode + ", Msg: " + errorMsg;
 		if (advancedOrderRejectJson != null) {
 			str += (", AdvancedOrderRejectJson: " + advancedOrderRejectJson);
