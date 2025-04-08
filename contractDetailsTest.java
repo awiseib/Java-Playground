@@ -49,38 +49,13 @@ public class contractDetailsTest extends DefaultEWrapper {
 		    }
 		}).start();Thread.sleep(1000);
 
-		// FIGI Contract
-		// Contract contract = new Contract();
-		// contract.secId("BBG000B9XRY4");
-		// contract.secType("FIGI");
-		// contract.exchange("SMART");
-
-		// // Stock Contract
-		// Contract contract = new Contract();
-		// contract.symbol("AAPL");
-		// contract.secType("STK");
-		// contract.exchange("SMART");
-		// contract.currency("USD");
-		// contract.primaryExch("ISLAND");
-
-		// Futures Contract
+		// Stock Contract
 		Contract contract = new Contract();
-		contract.symbol("SGB");
-		contract.secType("FUT");
-		contract.exchange("SGX");
-		contract.currency("JPY");
-		contract.lastTradeDateOrContractMonth("202312");
-
-		// Options Contract
-		// Contract contract = new Contract();
-		// contract.symbol("SPX");
-		// contract.secType("OPT");
-		// contract.exchange("SMART");
-		// contract.currency("USD");
-		// contract.lastTradeDateOrContractMonth("202303");
-		// contract.strike(3840);
-		// contract.right("P");
-		// contract.tradingClass("SPX");
+		contract.symbol("AAPL");
+		contract.secType("STK");
+		contract.exchange("SMART");
+		contract.currency("USD");
+		contract.primaryExch("ISLAND");
 
 		m_client.reqContractDetails(1234, contract);
 
